@@ -18,7 +18,6 @@ public class DataGenerator {
             return new RegistrationInfo(faker.address().city(),
                     LocalDate.now().plusDays(5), faker.name().fullName(),
                     faker.numerify("+###########"));
-
         }
 
     }
