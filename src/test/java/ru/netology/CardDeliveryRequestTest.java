@@ -16,7 +16,7 @@ import static com.codeborne.selenide.Selenide.open;
 public class CardDeliveryRequestTest {
     @BeforeEach
     void setup(){
-        open("http://0.0.0.0:9999");
+        open("http://localhost:9999/");
 
     }
 
@@ -37,13 +37,6 @@ public class CardDeliveryRequestTest {
         RegistrationPage registrationPage = new RegistrationPage();
         RegistrationInfo info = DataGenerator.Registration.generateInfo("ru");
         registrationPage.login(info);
-        $("[data-test-id='notification'] .icon-button").click();
-        $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.DELETE);
-        $("[data-test-id='date'] input").setValue(planningDate);
-        $("button.button_view_extra").click();
-        $("[data-test-id='notification'")
-                    .should(appear, Duration.ofSeconds(15))
-                    .shouldHave(text("Встреча успешно забронирована на " + planningDate), Duration.ofSeconds(15));
-
+        registrationPage.replan(info);
         }
 }

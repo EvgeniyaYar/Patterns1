@@ -4,10 +4,10 @@ import org.openqa.selenium.Keys;
 import ru.netology.RegistrationInfo;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import static com.codeborne.selenide.Condition.appear;
-import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 
 public class RegistrationPage {
@@ -20,8 +20,20 @@ public class RegistrationPage {
         $("[data-test-id='phone'] .input__control").setValue(info.getPhone());
         $("[data-test-id='agreement']").click();
         $("button.button_view_extra").click();
-        $("[data-test-id='notification'")
+        $("[data-test-id='success-notification']")
                 .should(appear, Duration.ofSeconds(15))
-                .shouldHave(text("Встреча успешно забронирована на " + planningDate), Duration.ofSeconds(15));
+                .shouldHave(text("Встреча успешно запланирована на " + planningDate), Duration.ofSeconds(15));
+    }
+    public void replan(RegistrationInfo info) {
+        String planningDate = LocalDate.now().plusDays(11).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        $("[data-test-id='success-notification'] .icon-button").shouldBe(visible, Duration.ofSeconds(15)).click();
+        $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.DELETE);
+        $("[data-test-id='date'] input").setValue(planningDate);
+        $("button.button_view_extra").click();
+        $("[data-test-id='replan-notification'] .button").click();
+        $("[data-test-id='success-notification']")
+                .should(appear, Duration.ofSeconds(15))
+                .shouldHave(text("Встреча успешно запланирована на " + planningDate), Duration.ofSeconds(15));
     }
 }
+
